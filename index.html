@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TV Player</title>
 <meta name="theme-color" content="#0a1929"/>
-<link rel="icon" type="image/svg+xml" href="icon.svg"/>
+<link rel="icon" type="image/svg+xml" href="/tv/icon.svg"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TV Player">
@@ -17,7 +17,7 @@
   --txt:#f1f5f9;--accent:#4CAF50;--bar:#0d2137
 }
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);height:100vh;overflow:hidden}
-.app-layout{display:flex;height:100vh}
+.app-layout{display:flex;height:calc(100vh - 56px)} /* ← deixa espaço para a barra */
 .sidebar{width:380px;background:var(--card2);border-right:1px solid #1a3a5c;display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-header{padding:15px;background:var(--bar);border-bottom:1px solid #1a3a5c}
 .sidebar-header h2{font-size:1rem;color:#fff;display:flex;align-items:center;gap:8px}
@@ -45,9 +45,44 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .placeholder-screen svg{width:64px;height:64px;margin-bottom:15px;stroke:#444}
 #iframe-container:fullscreen{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
 #iframe-container:fullscreen #main-iframe{display:block}
-#pwa_btn{position:fixed;bottom:16px;right:16px;z-index:9999;background:var(--accent);color:#052e16;border:none;border-radius:999px;padding:12px 18px;font-weight:800;font-size:13px;box-shadow:0 8px 20px rgba(0,0,0,.35);cursor:pointer}
+
+/* ===== NOVA BARRA INFERIOR ===== */
+.bottom-bar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:56px;
+  background:var(--bar); /* ← mesma cor azul escura da barra do topo */
+  border-top:1px solid #1a3a5c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+#pwa_btn{
+  background:transparent;
+  color:var(--accent);
+  border:none;
+  padding:10px 24px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:all .2s;
+  border-radius:8px;
+}
+#pwa_btn:hover{background:rgba(76,175,80,.1)}
 #pwa_btn:active{transform:scale(.97)}
-@media(max-width:768px){.app-layout{flex-direction:column}.sidebar{width:100%;height:50%;order:2}.player-section{height:50%;order:1}.channel-list{grid-template-columns:repeat(3,1fr);gap:8px}}
+
+@media(max-width:768px){
+  .app-layout{flex-direction:column;height:calc(100vh - 56px)}
+  .sidebar{width:100%;height:50%;order:2}
+  .player-section{height:50%;order:1}
+  .channel-list{grid-template-columns:repeat(3,1fr);gap:8px}
+}
 @media(max-width:400px){.channel-list{gap:6px;padding:8px}}
 </style>
 </head>
@@ -88,7 +123,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </main>
 </div>
 
-<button id="pwa_btn" onclick="pwaInstall()">📲 Instalar app</button>
+<!-- ===== BARRA INFERIOR COM BOTÃO ===== -->
+<div class="bottom-bar">
+  <button id="pwa_btn" onclick="pwaInstall()">📲 Instalar aplicativo</button>
+</div>
 
 <script>
 // === LÓGICA DO PLAYER ===
@@ -272,62 +310,45 @@ function toggleFullscreen(){
 
 renderChannels();
 
-// ===== PWA — CORRIGIDO =====
+// ===== PWA — AJUSTADO PARA /tv/ =====
 var pwaDeferred=null;
 
-// ✅ Usa caminho absoluto para não quebrar em subpastas
-function pwaBase(){
-  const p=location.pathname;
-  return p.substring(0,p.lastIndexOf('/')+1);
-}
-
 function pwaManifest(){
-  const base=pwaBase();
-  console.log('[PWA] Base URL:', base); // ← ajuda a debugar no console
-
   var m={
     name:'TV Player',
     short_name:'TV',
-    start_url:base,
+    start_url:'/tv/',
     display:'standalone',
     background_color:'#0a1929',
     theme_color:'#0a1929',
     icons:[{
-      src:base+'icon.svg',
+      src:'/tv/icon.svg',
       sizes:'512x512',
       type:'image/svg+xml',
       purpose:'any'
     }]
   };
-
-  console.log('[PWA] Manifesto:', m); // ← confere no console
-
   var b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
   var l=document.getElementById('pwa_manifest');
   if(!l){l=document.createElement('link');l.id='pwa_manifest';l.rel='manifest';document.head.appendChild(l)}
   l.href=URL.createObjectURL(b);
 }
 
-setTimeout(pwaManifest,500); // ← mais rápido
+setTimeout(pwaManifest,500);
 
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   pwaDeferred=e;
-  console.log('[PWA] beforeinstallprompt capturado ✅'); // ← aparece no console
 });
 
 window.addEventListener('appinstalled',function(){
-  console.log('[PWA] App instalado! ✅');
   var b=document.getElementById('pwa_btn');if(b)b.style.display='none';
 });
 
 function pwaInstall(){
-  console.log('[PWA] Botão clicado. pwaDeferred:', !!pwaDeferred);
-
   if(pwaDeferred){
     pwaDeferred.prompt();
     pwaDeferred.userChoice.then(function(c){
-      console.log('[PWA] Resultado:', c.outcome);
       if(c.outcome==='accepted'){
         pwaDeferred=null;
         document.getElementById('pwa_btn').style.display='none';
@@ -337,7 +358,7 @@ function pwaInstall(){
     var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
     alert(ios
       ? '📲 Para instalar: toque em Compartilhar → "Adicionar à Tela de Início"'
-      : '📲 Para instalar: toque no menu ⋮ → "Adicionar à tela inicial"\n\n⚠️ Se não aparecer, abra em aba anônima e confira se o arquivo icon.svg está junto com index.html');
+      : '📲 Para instalar: toque no menu ⋮ → "Adicionar à tela inicial"\n\nAcesse sempre em aba anônima para testar!');
   }
 }
 </script>
