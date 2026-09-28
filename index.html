@@ -77,29 +77,38 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   flex:1;position:relative;width:100%;height:100%;background:#000;
   overflow:hidden;
 }
-/* Máscara para esconder a palavra EMBED */
+/* Máscara para esconder a palavra EMBED - sem cortar o vídeo */
 .iframe-container::before{
   content:'';
   position:absolute;
   top:0;left:0;right:0;
-  height:45px;
+  height:40px;
   background:#000;
   z-index:10;
   pointer-events:none;
 }
 #iframe-player{
-  width:calc(100% + 20px);
-  height:calc(100% + 50px);
+  width:100%;
+  height:calc(100% + 40px);
   border:none;
   display:none;
   position:absolute;
-  top:-50px;
-  left:-10px;
+  top:-40px;
+  left:0;
 }
+/* Em tela cheia: sem deslocamento, nada cortado! */
+#iframe-container:fullscreen #iframe-player{
+  width:100%;
+  height:100%;
+  top:0;
+}
+#iframe-container:fullscreen::before{
+  display:none;
+}
+
 .placeholder-screen{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#888;z-index:5}
 .placeholder-screen svg{width:64px;height:64px;margin-bottom:15px;stroke:#444}
 #iframe-container:fullscreen{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
-#iframe-container:fullscreen #iframe-player{display:block}
 
 .bottom-bar{
   position:fixed;bottom:0;left:0;right:0;height:56px;
@@ -191,20 +200,18 @@ function markAsInstalled(){
 }
 window.addEventListener('load', ()=>{ if(!checkIfAppMode() && !checkInstalledFlag()){} });
 
-// ✅ Função para girar tela para paisagem
+// Girar tela
 function girarTelaPaisagem(){
   if(screen.orientation && screen.orientation.lock){
-    screen.orientation.lock('landscape').catch(e=>console.log('Rotação automática requer permissão do sistema:',e));
+    screen.orientation.lock('landscape').catch(e=>console.log('Rotação:',e));
   }
 }
-// ✅ Função para voltar para retrato ao sair da tela cheia
 function girarTelaRetrato(){
   if(screen.orientation && screen.orientation.unlock){
     screen.orientation.unlock();
   }
 }
 
-// Monitora saída da tela cheia para desbloquear rotação
 document.addEventListener('fullscreenchange', ()=>{
   if(!document.fullscreenElement){
     girarTelaRetrato();
@@ -368,7 +375,6 @@ function abrirCanal(canal,cardEl){
   placeholder.style.display='none';
   iframePlayer.style.display='block';
   
-  // Autoplay
   let urlComAutoplay = canal.url;
   if(!urlComAutoplay.includes('autoplay=1')){
     urlComAutoplay += (canal.url.includes('?') ? '&' : '?') + 'autoplay=1';
@@ -379,11 +385,10 @@ function abrirCanal(canal,cardEl){
   cardEl.classList.add('active');
   cardEl.scrollIntoView({behavior:'smooth',block:'nearest'});
   
-  // ✅ Tela cheia + girar para paisagem
   setTimeout(() => {
     if(!document.fullscreenElement){
       iframeContainer.requestFullscreen?.().then(()=>{
-        girarTelaPaisagem(); // Gira a tela!
+        girarTelaPaisagem();
       }).catch(e=>console.log('Tela cheia:',e));
     }
   }, 400);
@@ -392,7 +397,7 @@ function abrirCanal(canal,cardEl){
 function toggleFullscreen(){
   if(!document.fullscreenElement){
     iframeContainer.requestFullscreen?.().then(()=>{
-      girarTelaPaisagem(); // Gira ao clicar também
+      girarTelaPaisagem();
     }).catch(e=>console.log(e));
   }else{
     document.exitFullscreen?.();
