@@ -26,178 +26,153 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   overflow:hidden;
 }
 
-/* === PLAYER === */
-.player-section{
+.player-tv{
   order:1;flex-shrink:0;position:relative;
   max-height:0;opacity:0;overflow:hidden;
-  transition:max-height .3s ease, opacity .3s ease;
-  background:#000;z-index:10;
-  flex:none;
+  transition:all .3s ease;
+  background:#000;
 }
-.player-section.visible{max-height:300px;opacity:1;flex:none}
+.player-tv.visible{max-height:340px;opacity:1}
+
+.player-radio{
+  order:1;flex-shrink:0;position:relative;
+  max-height:0;opacity:0;overflow:hidden;
+  transition:all .3s ease;
+  background:radial-gradient(circle at top,#1a3a2e 0%,#0a1a12 60%,#000 100%);
+}
+.player-radio.visible{max-height:220px;opacity:1}
 
 .player-top-bar{
-  padding:10px 20px;background:rgba(20,20,20,.95);border-bottom:1px solid #333;
-  display:flex;justify-content:space-between;align-items:center;display:none
+  padding:6px 15px;background:rgba(20,20,20,.95);
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #333;
 }
-.player-top-bar.visible{display:flex}
-.channel-info{display:flex;align-items:center;gap:12px}
-#current-channel-title{font-size:1rem;font-weight:600;color:#fff}
-.controls{display:flex;gap:8px}
+.channel-info{display:flex;align-items:center;gap:10px}
+#current-channel-title{font-size:.9rem;font-weight:600;color:#fff}
+.controls{display:flex;gap:6px}
 .control-btn{
   background:#333;border:1px solid #444;color:#fff;
-  width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;
   cursor:pointer;transition:all .2s
 }
 .control-btn:hover{background:var(--accent);border-color:var(--accent)}
-.control-btn svg{width:16px;height:16px;fill:currentColor}
+.control-btn svg{width:14px;height:14px;fill:currentColor}
 
-.player-content{
-  position:relative;width:100%;
-  height:260px;
-  overflow:hidden;
+.player-content-tv{
+  position:relative;width:100%;height:300px;overflow:hidden;
 }
-
-/* TV */
+.player-content-radio{
+  position:relative;width:100%;height:180px;overflow:hidden;
+}
 #main-iframe{
   position:absolute;top:0;left:0;width:100%;height:100%;
-  border:none;opacity:0;transition:opacity .3s ease;z-index:2
+  border:none;opacity:0;transition:opacity .3s ease;z-index:2;
 }
 #main-iframe.visible{opacity:1}
 
-/* RÁDIO — VISUALIZADOR */
 .radio-visualizer{
   position:absolute;top:0;left:0;width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at center,#1a3a2e 0%,#0a1a12 50%,#000 100%);
-  opacity:0;transition:opacity .3s ease;z-index:1
+  opacity:0;transition:opacity .3s ease;z-index:1;
 }
-.radio-visualizer.visible{opacity:1}
+.player-radio.visible .radio-visualizer{opacity:1}
 
 .wave-ring{position:absolute;border-radius:50%;border:2px solid rgba(0,255,136,.3);animation:pulse 1.2s ease-out infinite}
 @keyframes pulse{0%{transform:scale(.4);opacity:.8}100%{transform:scale(1.3);opacity:0}}
 
-.bars-container{display:flex;align-items:center;justify-content:center;gap:6px;height:180px}
+.bars-container{display:flex;align-items:center;justify-content:center;gap:4px;height:140px}
 .sound-bar{
-  width:10px;background:linear-gradient(to top,var(--radio-accent),#88ffcc);
+  width:8px;background:linear-gradient(to top,var(--radio-accent),#88ffcc);
   border-radius:4px;transform-origin:bottom center;
   animation:bounce .5s ease-in-out infinite alternate;
-  box-shadow:0 0 10px rgba(0,255,136,.4)
+  box-shadow:0 0 8px rgba(0,255,136,.4)
 }
 @keyframes bounce{0%{transform:scaleY(.1)}100%{transform:scaleY(1)}}
 
-.radio-center-info{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#fff;text-shadow:0 0 10px rgba(0,255,136,.5)}
-.radio-title{font-size:1.3rem;font-weight:bold;color:var(--radio-accent);margin-bottom:4px}
+.radio-center-info{position:absolute;bottom:15px;left:0;right:0;text-align:center;color:#fff;text-shadow:0 0 8px rgba(0,255,136,.5)}
+.radio-title{font-size:1.2rem;font-weight:bold;color:var(--radio-accent);margin-bottom:4px}
 .radio-genre{font-size:.9rem;opacity:.7}
 
 #iframe-container:fullscreen{width:100vw;height:100vh;position:fixed;top:0;left:0;z-index:9999}
 
-/* === BOTÃO FECHAR — ACIMA DA BARRA DE TV === */
-.close-bar{
-  order:2;flex-shrink:0;
-  padding:8px 20px;
-  background:linear-gradient(to right,#1a2d42,#0f1f33);
-  border-bottom:1px solid #2a4a6b;
-  display:flex;justify-content:flex-end;
-  max-height:0;opacity:0;overflow:hidden;
-  transition:all .3s ease;
-}
-.close-bar.visible{max-height:50px;opacity:1}
-
-.close-btn{
-  background:transparent;
-  color:#ff6b6b;
-  border:1px solid #ff6b6b;
-  padding:6px 16px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:600;
-  transition:all .2s
-}
-.close-btn:hover{
-  background:#ff6b6b;
-  color:#fff;
-}
-
-/* === CONTROLES DE RÁDIO === */
 .radio-controls-bar{
-  order:3;flex-shrink:0;padding:12px 20px;background:linear-gradient(to right,#0f2e23,#0a1a12);
+  order:3;flex-shrink:0;padding:8px 15px;background:linear-gradient(to right,#0f2e23,#0a1a12);
   border-bottom:1px solid #1a3a2e;display:flex;align-items:center;justify-content:center;
-  gap:15px;max-height:0;opacity:0;overflow:hidden;
-  transition:all .3s ease;
-  flex:none;
+  gap:12px;max-height:0;opacity:0;overflow:hidden;transition:all .3s ease;
 }
-.radio-controls-bar.visible{max-height:80px;opacity:1;padding:12px 20px}
+.radio-controls-bar.visible{max-height:65px;opacity:1}
 
 .radio-control-btn{
   background:rgba(0,255,136,.15);border:1px solid var(--radio-accent);color:var(--radio-accent);
-  width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;font-size:20px;flex-shrink:0
+  width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;font-size:18px
 }
-.radio-control-btn:hover{background:var(--radio-accent);color:#000;box-shadow:0 0 15px rgba(0,255,136,.5)}
+.radio-control-btn:hover{background:var(--radio-accent);color:#000;box-shadow:0 0 12px rgba(0,255,136,.5)}
 
-.volume-container{display:flex;align-items:center;gap:10px;flex:0 0 200px}
-.volume-icon{color:var(--radio-accent);font-size:18px;flex-shrink:0}
+.volume-container{display:flex;align-items:center;gap:8px;flex:0 0 160px}
+.volume-icon{color:var(--radio-accent);font-size:16px}
 .volume-slider{
-  flex:1;height:8px;-webkit-appearance:none;appearance:none;background:rgba(0,255,136,.2);
+  flex:1;height:6px;-webkit-appearance:none;appearance:none;background:rgba(0,255,136,.2);
   border-radius:4px;outline:none;cursor:pointer
 }
 .volume-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;width:20px;height:20px;background:var(--radio-accent);border-radius:50%;
-  cursor:pointer;box-shadow:0 0 10px rgba(0,255,136,.5)
+  -webkit-appearance:none;width:18px;height:18px;background:var(--radio-accent);border-radius:50%;
+  cursor:pointer;box-shadow:0 0 8px rgba(0,255,136,.5)
 }
-.volume-slider::-moz-range-thumb{
-  width:20px;height:20px;background:var(--radio-accent);border-radius:50%;border:none;cursor:pointer
-}
-.volume-value{color:var(--radio-accent);font-size:.8rem;min-width:45px;text-align:right}
+.volume-value{color:var(--radio-accent);font-size:.75rem;min-width:40px;text-align:right}
 
-/* === ÁREA DAS BARRAS === */
-.bars-wrapper{
-  order:4;flex:1;overflow-y:auto;
-  padding-top:0;
-}
+.bars-wrapper{order:4;flex:1;overflow-y:auto;padding-top:0}
 
-.bar-section-top{
-  padding:10px 0;background:var(--card2);border-bottom:1px solid #1a3a5c;
+.bar-section{
+  padding:8px 0;background:var(--card2);border-bottom:1px solid #1a3a5c;
   transition:opacity .3s ease, max-height .3s ease, margin .3s ease;
-  opacity:1;max-height:200px;overflow:hidden;
-  margin:0;
+  opacity:1;max-height:500px;overflow:hidden;
 }
-.bar-section-top.hidden-when-tv{opacity:0;max-height:0;margin:0;overflow:hidden;padding:0}
+.bar-section.hidden-bar{opacity:0;max-height:0;margin:0}
 
-.bar-section-bottom{
-  padding:10px 0;background:var(--card2);border-bottom:1px solid #1a3a5c;
-  transition:opacity .3s ease, max-height .3s ease, margin .3s ease;
-  opacity:1;max-height:200px;overflow:hidden;
-  margin:0;
+.bar-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 15px 3px;
 }
-.bar-section-bottom.hidden-when-radio{opacity:0;max-height:0;margin:0;overflow:hidden;padding:0}
+.bar-label{
+  font-size:.75rem;font-weight:600;color:#888;display:flex;align-items:center;gap:6px
+}
+.close-btn{
+  background:transparent;color:#ff6b6b;border:1px solid #ff6b6b;
+  padding:1px 8px;
+  border-radius:4px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:.7rem;
+  line-height:1.2;
+  transition:all .2s
+}
+.close-btn:hover{background:#ff6b6b;color:#fff}
 
-.bar-label{padding:6px 15px 4px;font-size:.8rem;font-weight:600;color:#888;display:flex;align-items:center;gap:6px}
-.bar-container{display:flex;align-items:center;position:relative;padding:0 10px;gap:8px}
+.bar-container{display:flex;align-items:center;position:relative;padding:0 8px;gap:6px}
 .scroll-btn{
   background:var(--btn-nav);color:#fff;border:none;cursor:pointer;
-  border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;
-  font-size:16px;transition:background .2s;flex-shrink:0
+  border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:background .2s;flex-shrink:0
 }
 .scroll-btn:hover{background:var(--btn-nav-hover)}
-.cards-scroll{display:flex;gap:12px;overflow-x:auto;scroll-behavior:smooth;padding:6px 10px;width:100%}
-.cards-scroll::-webkit-scrollbar{height:6px}
+.cards-scroll{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:6px 8px;width:100%}
+.cards-scroll::-webkit-scrollbar{height:4px}
 .cards-scroll::-webkit-scrollbar-thumb{background:#3a5f85;border-radius:4px}
 
 .channel-card, .radio-card{
-  flex:0 0 100px;background:var(--card);border:2px solid var(--border);
-  border-radius:10px;padding:12px;cursor:pointer;transition:all .2s;text-align:center
+  flex:0 0 90px;background:var(--card);border:2px solid var(--border);
+  border-radius:10px;padding:10px;cursor:pointer;transition:all .2s;text-align:center
 }
 .channel-card:hover, .radio-card:hover{transform:scale(1.05);border-color:var(--accent)}
 .channel-card.active, .radio-card.active{border-color:var(--radio-accent);box-shadow:0 0 0 2px rgba(0,255,136,.3)}
 .radio-card.loading{opacity:.6;cursor:wait}
 
-.logo-box{width:60px;height:60px;margin:0 auto 8px;border-radius:50%;background:#1a1a1e;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-box{width:50px;height:50px;margin:0 auto 6px;border-radius:50%;background:#1a1a1e;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .card-logo{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.card-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;background:linear-gradient(135deg,#2a4a6b,#1a3a5c);border-radius:8px;color:#fff}
-.card-name{font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-genre{font-size:.68rem;color:#888;margin-top:2px}
+.card-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;background:linear-gradient(135deg,#2a4a6b,#1a3a5c);border-radius:8px;color:#fff}
+.card-name{font-size:.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-genre{font-size:.65rem;color:#888;margin-top:2px}
 
 .hidden-radio-player{position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none}
 
@@ -215,23 +190,20 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 #pwa_btn.hidden{display:none !important}
 
 @media(max-width:768px){
-  .channel-card, .radio-card{flex:0 0 90px}
-  .player-content{height:220px}
-  .player-section.visible{max-height:260px}
-  .volume-container{flex:0 0 150px}
-  .radio-controls-bar{gap:10px;padding:10px 15px}
-  .radio-controls-bar.visible{padding:10px 15px}
+  .channel-card, .radio-card{flex:0 0 80px}
+  .player-content-tv{height:240px}
+  .player-tv.visible{max-height:280px}
+  .volume-container{flex:0 0 130px}
 }
 </style>
 </head>
 <body>
 
 <div class="app-layout">
-  <!-- 1º PLAYER -->
-  <main class="player-section" id="playerSection">
-    <div class="player-top-bar" id="tvInfoBar">
+  <div class="player-tv" id="playerTv">
+    <div class="player-top-bar">
       <div class="channel-info">
-        <span style="color:var(--accent);font-size:1rem">●</span>
+        <span style="color:var(--accent);font-size:.9rem">●</span>
         <span id="current-channel-title">—</span>
       </div>
       <div class="controls">
@@ -240,13 +212,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         </button>
       </div>
     </div>
-    <div class="player-content" id="iframe-container">
+    <div class="player-content-tv" id="iframe-container">
       <iframe id="main-iframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
-      <div class="radio-visualizer" id="radioVisualizer">
-        <div class="wave-ring" style="width:100px;height:100px;animation-delay:0s"></div>
-        <div class="wave-ring" style="width:140px;height:140px;animation-delay:.2s"></div>
-        <div class="wave-ring" style="width:180px;height:180px;animation-delay:.4s"></div>
-        <div class="wave-ring" style="width:220px;height:220px;animation-delay:.6s"></div>
+    </div>
+  </div>
+
+  <div class="player-radio" id="playerRadio">
+    <div class="player-content-radio">
+      <div class="radio-visualizer">
+        <div class="wave-ring" style="width:80px;height:80px;animation-delay:0s"></div>
+        <div class="wave-ring" style="width:120px;height:120px;animation-delay:.2s"></div>
+        <div class="wave-ring" style="width:160px;height:160px;animation-delay:.4s"></div>
+        <div class="wave-ring" style="width:200px;height:200px;animation-delay:.6s"></div>
         <div class="bars-container" id="barsContainer"></div>
         <div class="radio-center-info">
           <div class="radio-title" id="radioNameDisplay">—</div>
@@ -254,14 +231,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         </div>
       </div>
     </div>
-  </main>
-
-  <!-- 2º BOTÃO FECHAR — ACIMA DA BARRA DE TV -->
-  <div class="close-bar" id="closeBar">
-    <button class="close-btn" onclick="fecharPlayer()">✖ Fechar</button>
   </div>
 
-  <!-- 3º CONTROLES DE RÁDIO -->
   <div class="radio-controls-bar" id="radioControlsBar">
     <button class="radio-control-btn" id="playPauseBtn" onclick="alternarPlay()">▶</button>
     <div class="volume-container">
@@ -272,23 +243,28 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <button class="radio-control-btn" id="mudoBtn" onclick="alternarMudo()">🔇</button>
   </div>
 
-  <!-- 4º BARRAS DE CANAIS -->
   <div class="bars-wrapper">
-    <div class="bar-section-top" id="tvBar">
-      <div class="bar-label">📺 Canais TV</div>
+    <div class="bar-section" id="tvBar">
+      <div class="bar-header">
+        <div class="bar-label">📺 Canais TV</div>
+        <button class="close-btn" onclick="fecharTudo()">✖</button>
+      </div>
       <div class="bar-container">
-        <button class="scroll-btn" onclick="rolarTv(-240)">&#10094;</button>
+        <button class="scroll-btn" onclick="rolarTv(-200)">&#10094;</button>
         <div class="cards-scroll" id="tvScroll"></div>
-        <button class="scroll-btn" onclick="rolarTv(240)">&#10095;</button>
+        <button class="scroll-btn" onclick="rolarTv(200)">&#10095;</button>
       </div>
     </div>
 
-    <div class="bar-section-bottom" id="radioBar">
-      <div class="bar-label">📻 Rádios</div>
+    <div class="bar-section" id="radioBar">
+      <div class="bar-header">
+        <div class="bar-label">📻 Rádios</div>
+        <button class="close-btn" onclick="fecharTudo()">✖</button>
+      </div>
       <div class="bar-container">
-        <button class="scroll-btn" onclick="rolarRadio(-240)">&#10094;</button>
+        <button class="scroll-btn" onclick="rolarRadio(-200)">&#10094;</button>
         <div class="cards-scroll" id="radioScroll"></div>
-        <button class="scroll-btn" onclick="rolarRadio(240)">&#10095;</button>
+        <button class="scroll-btn" onclick="rolarRadio(200)">&#10095;</button>
       </div>
     </div>
   </div>
@@ -303,7 +279,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 </div>
 
 <script>
-// === PWA ===
 const pwaBtn = document.getElementById('pwa_btn');
 let pwaDeferred = null;
 function checkIfAppMode(){
@@ -323,314 +298,276 @@ function pwaManifest(){
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pwaDeferred=e;checkIfAppMode();});
 window.addEventListener('appinstalled',markAsInstalled);
 
-// === CONTROLES ===
+const playerTv = document.getElementById('playerTv');
+const playerRadio = document.getElementById('playerRadio');
+const radioControlsBar = document.getElementById('radioControlsBar');
+const mainIframe = document.getElementById('main-iframe');
+const tvBar = document.getElementById('tvBar');
+const radioBar = document.getElementById('radioBar');
+const currentChannelTitle = document.getElementById('current-channel-title');
+const radioNameDisplay = document.getElementById('radioNameDisplay');
+const radioGenreDisplay = document.getElementById('radioGenreDisplay');
 const audio = document.getElementById('radioPlayer');
 const volSlider = document.getElementById('volSlider');
 const volValue = document.getElementById('volValue');
 const volIcon = document.getElementById('volIcon');
 const playPauseBtn = document.getElementById('playPauseBtn');
-const playerSection = document.getElementById('playerSection');
-const closeBar = document.getElementById('closeBar');
-const radioControlsBar = document.getElementById('radioControlsBar');
-const mainIframe = document.getElementById('main-iframe');
-const tvInfoBar = document.getElementById('tvInfoBar');
-const radioVisualizer = document.getElementById('radioVisualizer');
-const radioNameDisplay = document.getElementById('radioNameDisplay');
-const radioGenreDisplay = document.getElementById('radioGenreDisplay');
-const barsContainer = document.getElementById('barsContainer');
-const tvBar = document.getElementById('tvBar');
-const radioBar = document.getElementById('radioBar');
 
-let currentRadio = null;
-let currentCard = null;
-let isLoading = false;
-let ultimoVolumeSalvo = 80;
-let animacaoRodando = false;
+let currentRadio = null, currentCard = null, isLoading = false;
+let ultimoVolumeSalvo = 80, animacaoRodando = false;
 
-// INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', () => {
-  pwaManifest();
-  checkIfAppMode();
-  inicializarVolume();
-  montarBarrasSom();
-  renderCanais();
-  renderRadios();
+  pwaManifest(); checkIfAppMode();
+  inicializarVolume(); montarBarrasSom();
+  renderCanais(); renderRadios();
+  tvBar.classList.remove('hidden-bar');
+  radioBar.classList.remove('hidden-bar');
 });
 
 function inicializarVolume(){
-  audio.volume = 0.8;
-  volSlider.value = 80;
-  volValue.textContent = '80%';
-  volIcon.textContent = '🔊';
-  
+  audio.volume = 0.8; volSlider.value = 80; volValue.textContent = '80%'; volIcon.textContent = '🔊';
   volSlider.addEventListener('input', () => {
     const v = parseInt(volSlider.value);
-    audio.volume = v / 100;
-    volValue.textContent = v + '%';
-    if(v === 0){
-      volIcon.textContent = '🔇';
-    } else if(v < 40){
-      volIcon.textContent = '🔉';
-      ultimoVolumeSalvo = v;
-    } else {
-      volIcon.textContent = '🔊';
-      ultimoVolumeSalvo = v;
-    }
+    audio.volume = v / 100; volValue.textContent = v + '%';
+    volIcon.textContent = v === 0 ? '🔇' : v < 40 ? '🔉' : '🔊';
+    if(v > 0) ultimoVolumeSalvo = v;
   });
 }
-
 function alternarMudo(){
   if(audio.volume > 0){
     ultimoVolumeSalvo = Math.round(audio.volume * 100);
-    audio.volume = 0;
-    volSlider.value = 0;
-    volValue.textContent = '0%';
-    volIcon.textContent = '🔇';
+    audio.volume = 0; volSlider.value = 0; volValue.textContent = '0%'; volIcon.textContent = '🔇';
   } else {
     audio.volume = ultimoVolumeSalvo / 100;
-    volSlider.value = ultimoVolumeSalvo;
-    volValue.textContent = ultimoVolumeSalvo + '%';
+    volSlider.value = ultimoVolumeSalvo; volValue.textContent = ultimoVolumeSalvo + '%';
     volIcon.textContent = ultimoVolumeSalvo < 40 ? '🔉' : '🔊';
   }
 }
-
 function alternarPlay(){
   if(!currentRadio) return;
   if(audio.paused){
-    audio.play().then(() => {
-      playPauseBtn.textContent = '⏸';
-      if(currentCard) currentCard.classList.add('active');
-      iniciarVisualizador();
-    }).catch(e => console.log('Erro play:', e));
-  } else {
-    audio.pause();
-    playPauseBtn.textContent = '▶';
-    if(currentCard) currentCard.classList.remove('active');
-    pararVisualizador();
+    audio.play().then(()=>{playPauseBtn.textContent='⏸';if(currentCard)currentCard.classList.add('active');iniciarVisualizador();});
+  }else{
+    audio.pause(); playPauseBtn.textContent='▶';if(currentCard)currentCard.classList.remove('active');pararVisualizador();
   }
 }
 
-// === VISUALIZADOR ===
 function montarBarrasSom(){
-  barsContainer.innerHTML = '';
-  for(let i=0; i<24; i++){
-    const b = document.createElement('div');
-    b.className = 'sound-bar';
-    b.style.height = '30px';
-    b.style.animationDelay = (i * 0.05) + 's';
-    barsContainer.appendChild(b);
+  const c=document.getElementById('barsContainer'); c.innerHTML='';
+  for(let i=0;i<20;i++){
+    const b=document.createElement('div');b.className='sound-bar';b.style.height='20px';b.style.animationDelay=(i*.05)+'s';c.appendChild(b);
   }
 }
 function atualizarBarras(){
-  const bars = barsContainer.children;
-  for(let b of bars){
-    b.style.height = (Math.random() * 150 + 20) + 'px';
-  }
+  for(const b of document.getElementById('barsContainer').children) b.style.height=(Math.random()*100+20)+'px';
   if(animacaoRodando) requestAnimationFrame(atualizarBarras);
 }
-function iniciarVisualizador(){ animacaoRodando = true; atualizarBarras(); }
-function pararVisualizador(){
-  animacaoRodando = false;
-  const bars = barsContainer.children;
-  for(let b of bars) b.style.height = '30px';
-}
+function iniciarVisualizador(){animacaoRodando=true;atualizarBarras()}
+function pararVisualizador(){animacaoRodando=false;for(const b of document.getElementById('barsContainer').children)b.style.height='20px'}
 
-// === PLAYER — ORDEM: PLAYER → FECHAR → BARRAS TV/RÁDIO ===
-function mostrarTv(){
-  playerSection.classList.add('visible');
-  closeBar.classList.add('visible');
-  radioControlsBar.classList.remove('visible');
-  tvInfoBar.classList.add('visible');
+function abrirTv(canal){
+  fecharTudo();
+  playerTv.classList.add('visible');
   mainIframe.classList.add('visible');
-  radioVisualizer.classList.remove('visible');
-  tvBar.classList.remove('hidden-when-tv');
-  radioBar.classList.add('hidden-when-radio');
-}
-function mostrarRadio(){
-  playerSection.classList.add('visible');
-  closeBar.classList.add('visible');
-  radioControlsBar.classList.add('visible');
-  tvInfoBar.classList.remove('visible');
-  mainIframe.classList.remove('visible');
-  radioVisualizer.classList.add('visible');
-  tvBar.classList.add('hidden-when-tv');
-  radioBar.classList.remove('hidden-when-radio');
-}
-function fecharPlayer(){
-  playerSection.classList.remove('visible');
-  closeBar.classList.remove('visible');
-  radioControlsBar.classList.remove('visible');
-  mainIframe.src = '';
-  mainIframe.classList.remove('visible');
-  radioVisualizer.classList.remove('visible');
-  tvBar.classList.remove('hidden-when-tv');
-  radioBar.classList.remove('hidden-when-radio');
-  if(!audio.paused){
-    audio.pause();
-    playPauseBtn.textContent = '▶';
-    if(currentCard) currentCard.classList.remove('active');
-    pararVisualizador();
-  }
-  document.querySelectorAll('.channel-card, .radio-card').forEach(c => c.classList.remove('active'));
-  currentRadio = null;
-  currentCard = null;
+  mainIframe.src = 'https://sinalpublicoetv.vercel.app/?id=' + canal.id;
+  currentChannelTitle.textContent = canal.nome;
+  tvBar.classList.remove('hidden-bar');
+  radioBar.classList.add('hidden-bar');
 }
 
-// === TV ===
-function getLogoUrl(id){
-  const logos={
-    globosp:"https://i.ibb.co/Cpm2HM3s/globo.webp",record:"https://i.ibb.co/DSF58Yz/record.png",
-    sbt:"https://i.ibb.co/pjRjgW94/sbtsp.png",redetv:"https://i.ibb.co/hxZhB6hr/redetv.png",
-    bandsp:"https://i.ibb.co/B5Mq76Nq/bandsp.png",sportv:"https://i.ibb.co/HDcyFYV2/sportv.png",
-    sportv2:"https://i.ibb.co/tpWMfSrL/sportv2.png",sportv3:"https://i.ibb.co/0pF06xMN/sportv3.png",
-    band:"https://i.ibb.co/5QgFks5/band.png",bandnews:"https://i.ibb.co/3YGLYTjt/bandnews.png",
-    recordnews:"https://i.ibb.co/PfYm668/recordnews.png",cnnbrasil:"https://i.ibb.co/HfrwqNkH/cnnbrasil.png",
-    espn:"https://i.ibb.co/vxkWtTTL/espn.png",espn2:"https://i.ibb.co/vxkWtTTL/espn.png",
-    espn3:"https://i.ibb.co/vxkWtTTL/espn.png",espn4:"https://i.ibb.co/vxkWtTTL/espn.png",
-    premiere7:"https://i.ibb.co/VcxZjS7Y/premiere.png",combate:"https://i.ibb.co/PZz7kk5r/combate.png",
-    bandsports:"https://i.ibb.co/FkjYG14t/bandsports.png",xsports:"https://i.ibb.co/S4nLTTp1/xsports-1.png",
-    hbo:"https://i.ibb.co/HD9Wn7vy/hbo.png",hbo2:"https://i.ibb.co/SD7VNyJf/hbo2.png",
-    hbofamily:"https://i.ibb.co/G442rptb/hbofamily.png",hboplus:"https://i.ibb.co/twyX4rFH/hboplus.png",
-    hbosignature:"https://i.ibb.co/Rk1SswRr/hbosignature.png",max:"https://i.ibb.co/FkJQVyyf/max.png",
-    telecinepremium:"https://i.ibb.co/xqk1yBy4/tcpremium.png",telecineaction:"https://i.ibb.co/BHWJ4SHq/tcaction.png",
-    telecinecult:"https://i.ibb.co/v630bPJn/tccult.png",telecinefun:"https://i.ibb.co/ymTvmqkW/tcfun.png",
-    telecinepipoca:"https://i.ibb.co/hJW8BD4g/tcpipoca.png",space:"https://i.ibb.co/93CVX8VQ/space.png",
-    cinemax:"https://i.ibb.co/Fqn4DF1x/cinemax.png",megapix:"https://i.ibb.co/qFV92hxQ/megapix.png",
-    axn:"https://i.ibb.co/qFnF3sRx/axn.png",sonychannel:"https://i.ibb.co/3568ND4g/sonychannel.png",
-    warnerchannel:"https://i.ibb.co/Tq47nZMC/warnertv.png",comedycentral:"https://i.ibb.co/VW6gwr2C/comedycentral.png",
-    ae:"https://i.ibb.co/qM59Dt3d/aee.png",discoverychannel:"https://i.ibb.co/dwykbTv5/discoverychannel.png",
-    discoveryhh:"https://i.ibb.co/m3N4Fvs/discoveryhh.png",discoveryscience:"https://i.ibb.co/rfMTWY70/discoveryscience.png",
-    discoveryturbo:"https://i.ibb.co/sp9G9wSy/discoveryturbo.png",history:"https://i.ibb.co/20h0Lsyc/history2.png",
-    history2:"https://i.ibb.co/20h0Lsyc/history2.png",animalplanet:"https://i.ibb.co/jPZRZgzG/animalplanet.png",
-    off:"https://i.ibb.co/RpWTy8Bm/canaloff.png",gnt:"https://i.ibb.co/xt000F8P/gnt.png",
-    cartoonnetwork:"https://i.ibb.co/mF1wW6mS/cartoonnetwork.png",cartoonito:"https://i.ibb.co/KxPKb8zG/cartoonito.png",
-    discoverykids:"https://i.ibb.co/ZpZt0JN3/disneyplus.png",nickelodeon:"https://i.ibb.co/Hf132WJx/nickelodeon.png",
-    nickjr:"https://i.ibb.co/HDGMCpZ7/nickjr.png",disneyplus:"https://i.ibb.co/ZpZt0JN3/disneyplus.png",
-    paramountplus:"https://i.ibb.co/8L12R946/paramountplus.png"
-  };return logos[id]||null;
+function abrirRadio(radio, card){
+  if(isLoading) return;
+  if(currentCard === card && currentRadio && !audio.paused){ alternarPlay(); return; }
+  fecharTudo();
+  isLoading = true;
+  currentCard = card; card.classList.add('active','loading');
+  currentRadio = radio;
+  radioNameDisplay.textContent = radio.nome;
+  radioGenreDisplay.textContent = radio.genero;
+  
+  audio.pause(); audio.src = radio.url; audio.load();
+  audio.play().then(()=>{
+    isLoading = false; card.classList.remove('loading');
+    playPauseBtn.textContent='⏸';
+    playerRadio.classList.add('visible');
+    radioControlsBar.classList.add('visible');
+    tvBar.classList.add('hidden-bar');
+    radioBar.classList.remove('hidden-bar');
+    iniciarVisualizador();
+  }).catch(()=>{isLoading=false;alert('Clique em ▶ para ouvir');});
 }
-const channelData=[
-  {id:"globosp",name:"Globo SP"},{id:"record",name:"Record TV"},{id:"sbt",name:"SBT"},
-  {id:"redetv",name:"RedeTV!"},{id:"band",name:"Band"},{id:"bandsp",name:"Band SP"},
-  {id:"cnnbrasil",name:"CNN Brasil"},{id:"recordnews",name:"Record News"},{id:"bandnews",name:"Band News"},
-  {id:"espn",name:"ESPN"},{id:"espn2",name:"ESPN 2"},{id:"espn3",name:"ESPN 3"},{id:"espn4",name:"ESPN 4"},
-  {id:"sportv",name:"SporTV"},{id:"sportv2",name:"SporTV 2"},{id:"sportv3",name:"SporTV 3"},
-  {id:"premiere7",name:"Premiere"},{id:"combate",name:"Combate"},{id:"bandsports",name:"Band Sports"},
-  {id:"xsports",name:"XSports"},{id:"hbo",name:"HBO"},{id:"hbo2",name:"HBO 2"},
-  {id:"hbofamily",name:"HBO Family"},{id:"hboplus",name:"HBO Plus"},{id:"hbosignature",name:"HBO Signature"},
-  {id:"max",name:"Max"},{id:"telecinepremium",name:"TC Premium"},{id:"telecineaction",name:"TC Action"},
-  {id:"telecinecult",name:"TC Cult"},{id:"telecinefun",name:"TC Fun"},{id:"telecinepipoca",name:"TC Pipoca"},
-  {id:"space",name:"Space"},{id:"cinemax",name:"Cinemax"},{id:"megapix",name:"Megapix"},
-  {id:"axn",name:"AXN"},{id:"sonychannel",name:"Sony"},{id:"warnerchannel",name:"Warner"},
-  {id:"comedycentral",name:"Comedy"},{id:"ae",name:"A&E"},{id:"discoverychannel",name:"Discovery"},
-  {id:"discoveryhh",name:"Discovery H&H"},{id:"discoveryscience",name:"Discovery Science"},
-  {id:"discoveryturbo",name:"Discovery Turbo"},{id:"history",name:"History"},{id:"history2",name:"History 2"},
-  {id:"animalplanet",name:"Animal Planet"},{id:"off",name:"Canal Off"},{id:"gnt",name:"GNT"},
-  {id:"cartoonnetwork",name:"Cartoon"},{id:"cartoonito",name:"Cartoonito"},{id:"discoverykids",name:"Discovery Kids"},
-  {id:"nickelodeon",name:"Nickelodeon"},{id:"nickjr",name:"Nick Jr."},{id:"disneyplus",name:"Disney+"},
-  {id:"paramountplus",name:"Paramount+"}
-];
-const tvScroll=document.getElementById('tvScroll');
-const BASE_URL="https://sinalpublicoetv.vercel.app/?id=";
-function rolarTv(qtd){tvScroll.scrollBy({left:qtd,behavior:'smooth'})}
-function renderCanais(){
-  tvScroll.innerHTML="";
-  channelData.forEach(ch=>{
-    const card=document.createElement('div');card.className='channel-card';
-    const logoUrl=getLogoUrl(ch.id);
-    const init=ch.name.replace(/[^a-zA-Z]/g,'').substring(0,2).toUpperCase()||'TV';
-    card.innerHTML=`
-      <div class="logo-box">
-        ${logoUrl?`<img src="${logoUrl}" alt="${ch.name}" class="card-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="card-init" style="display:none">${init}</div>`:`<div class="card-init">${init}</div>`}
-      </div>
-      <div class="card-name">${ch.name}</div>
-    `;
-    card.onclick=()=>{
-      document.querySelectorAll('.channel-card').forEach(c=>c.classList.remove('active'));
-      card.classList.add('active');
-      document.getElementById('current-channel-title').textContent=ch.name;
-      mainIframe.src=BASE_URL+ch.id;
-      mostrarTv();
-    };
-    tvScroll.appendChild(card);
-  });
+
+function fecharTudo(){
+  playerTv.classList.remove('visible');
+  playerRadio.classList.remove('visible');
+  radioControlsBar.classList.remove('visible');
+  mainIframe.src = ''; mainIframe.classList.remove('visible');
+  if(!audio.paused){ audio.pause(); playPauseBtn.textContent='▶'; pararVisualizador(); }
+  document.querySelectorAll('.channel-card, .radio-card').forEach(c=>c.classList.remove('active','loading'));
+  currentRadio = currentCard = null;
+  tvBar.classList.remove('hidden-bar');
+  radioBar.classList.remove('hidden-bar');
 }
+
 function toggleFullscreen(){
   const c=document.getElementById('iframe-container');
   document.fullscreenElement?document.exitFullscreen?.():c.requestFullscreen?.().catch(()=>{});
 }
 
-// === RÁDIOS ===
-const radios=[
-  {nome:"Jovem Pan",url:"https://stream.zeno.fm/c45wbq2us3buv",logo:"https://www.google.com/s2/favicons?domain=jovempan.com.br&sz=128",genero:"Notícias",cor:"#e60014"},
-  {nome:"CBN",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/CBN_SPAAC.aac",logo:"https://www.google.com/s2/favicons?domain=cbn.globo.com&sz=128",genero:"Jornalismo",cor:"#d40000"},
-  {nome:"USP FM",url:"https://flow.emm.usp.br:8007/radiousp-128.mp3",logo:"https://www.google.com/s2/favicons?domain=usp.br&sz=128",genero:"MPB",cor:"#0055a5"},
-  {nome:"Antena 1",url:"https://antenaone.crossradio.com.br/stream/1",logo:"https://www.google.com/s2/favicons?domain=antena1.com.br&sz=128",genero:"Adulto",cor:"#003da5"},
-  {nome:"89 Rock",url:"https://ice.fabricahost.com.br/89aradiorockgo",logo:"https://www.google.com/s2/favicons?domain=radiorock.com.br&sz=128",genero:"Rock",cor:"#111"},
-  {nome:"Alpha FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_ALPHAFM.mp3",logo:"https://www.google.com/s2/favicons?domain=alphafm.com.br&sz=128",genero:"Flashback",cor:"#7b0099"},
-  {nome:"Mix FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/MIXFM_SAOPAULO.mp3",logo:"https://www.google.com/s2/favicons?domain=radiomixfm.com.br&sz=128",genero:"Pop",cor:"#ff6600"},
-  {nome:"Band FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/BANDFM_SP.mp3",logo:"https://www.google.com/s2/favicons?domain=band.com.br&sz=128",genero:"Popular",cor:"#00a651"},
-  {nome:"Nativa FM",url:"https://stm7.xcast.com.br:7460/stream",logo:"",genero:"Sertanejo",cor:"#c8102e"},
-  {nome:"Gazeta FM",url:"https://gazetafmsite.crossradio.com.br:19878",logo:"https://www.google.com/s2/favicons?domain=gazetafm.com.br&sz=128",genero:"Hits",cor:"#0072bc"},
-  {nome:"Discovery FM",url:"https://stream-173.zeno.fm/jup1kxp5o6wtv",logo:"",genero:"Variado",cor:"#00a0df"},
-  {nome:"Antena Rock",url:"https://hts05.brascast.com:12062/live",logo:"",genero:"Rock",cor:"#333"},
-  {nome:"Gospel",url:"http://servidor30.brlogic.com:8252/live",logo:"",genero:"Gospel",cor:"#f2a900"},
-  {nome:"Rádio Itália",url:"https://kisskiss.fluidstream.eu/KissKiss.mp3",logo:"https://www.google.com/s2/favicons?domain=radioitalia.it&sz=128",genero:"Itália",cor:"#008c45"}
+// === LINKS DOS LOGOS DAS RÁDIOS — ATUALIZADOS ===
+function getLogoUrl(id){
+  const logos={
+    globosp:"https://i.ibb.co/Cpm2HM3s/globo.webp",
+    record:"https://i.ibb.co/DSF58Yz/record.png",
+    sbt:"https://i.ibb.co/pjRjgW94/sbtsp.png",
+    redetv:"https://i.ibb.co/hxZhB6hr/redetv.png",
+    bandsp:"https://i.ibb.co/B5Mq76Nq/bandsp.png",
+    sportv:"https://i.ibb.co/HDcyFYV2/sportv.png",
+    sportv2:"https://i.ibb.co/tpWMfSrL/sportv2.png",
+    sportv3:"https://i.ibb.co/0pF06xMN/sportv3.png",
+    band:"https://i.ibb.co/5QgFks5/band.png",
+    bandnews:"https://i.ibb.co/3YGLYTjt/bandnews.png",
+    recordnews:"https://i.ibb.co/PfYm668/recordnews.png",
+    cnnbrasil:"https://i.ibb.co/HfrwqNkH/cnnbrasil.png",
+    espn:"https://i.ibb.co/vxkWtTTL/espn.png",
+    espn2:"https://i.ibb.co/vxkWtTTL/espn.png",
+    espn3:"https://i.ibb.co/vxkWtTTL/espn.png",
+    espn4:"https://i.ibb.co/vxkWtTTL/espn.png",
+    premiere7:"https://i.ibb.co/VcxZjS7Y/premiere.png",
+    combate:"https://i.ibb.co/PZz7kk5r/combate.png",
+    bandsports:"https://i.ibb.co/FkjYG14t/bandsports.png",
+    xsports:"https://i.ibb.co/S4nLTTp1/xsports-1.png",
+    hbo:"https://i.ibb.co/HD9Wn7vy/hbo.png",
+    hbo2:"https://i.ibb.co/SD7VNyJf/hbo2.png",
+    hbofamily:"https://i.ibb.co/G442rptb/hbofamily.png",
+    hboplus:"https://i.ibb.co/twyX4rFH/hboplus.png",
+    hbosignature:"https://i.ibb.co/Rk1SswRr/hbosignature.png",
+    max:"https://i.ibb.co/FkJQVyyf/max.png",
+    telecinepremium:"https://i.ibb.co/xqk1yBy4/tcpremium.png",
+    telecineaction:"https://i.ibb.co/BHWJ4SHq/tcaction.png",
+    telecinecult:"https://i.ibb.co/v630bPJn/tccult.png",
+    telecinefun:"https://i.ibb.co/ymTvmqkW/tcfun.png",
+    telecinepipoca:"https://i.ibb.co/hJW8BD4g/tcpipoca.png",
+    space:"https://i.ibb.co/93CVX8VQ/space.png",
+    cinemax:"https://i.ibb.co/Fqn4DF1x/cinemax.png",
+    megapix:"https://i.ibb.co/qFV92hxQ/megapix.png",
+    axn:"https://i.ibb.co/qFnF3sRx/axn.png",
+    sonychannel:"https://i.ibb.co/3568ND4g/sonychannel.png",
+    warnerchannel:"https://i.ibb.co/Tq47nZMC/warnertv.png",
+    comedycentral:"https://i.ibb.co/VW6gwr2C/comedycentral.png",
+    ae:"https://i.ibb.co/qM59Dt3d/aee.png",
+    discoverychannel:"https://i.ibb.co/dwykbTv5/discoverychannel.png",
+    discoveryhh:"https://i.ibb.co/m3N4Fvs/discoveryhh.png",
+    discoveryscience:"https://i.ibb.co/rfMTWY70/discoveryscience.png",
+    discoveryturbo:"https://i.ibb.co/sp9G9wSy/discoveryturbo.png",
+    history:"https://i.ibb.co/20h0Lsyc/history2.png",
+    history2:"https://i.ibb.co/20h0Lsyc/history2.png",
+    animalplanet:"https://i.ibb.co/jPZRZgzG/animalplanet.png",
+    off:"https://i.ibb.co/RpWTy8Bm/canaloff.png",
+    gnt:"https://i.ibb.co/xt000F8P/gnt.png",
+    cartoonnetwork:"https://i.ibb.co/mF1wW6mS/cartoonnetwork.png",
+    cartoonito:"https://i.ibb.co/KxPKb8zG/cartoonito.png",
+    discoverykids:"https://i.ibb.co/ZpZt0JN3/disneyplus.png",
+    nickelodeon:"https://i.ibb.co/Hf132WJx/nickelodeon.png",
+    nickjr:"https://i.ibb.co/HDGMCpZ7/nickjr.png",
+    disneyplus:"https://i.ibb.co/ZpZt0JN3/disneyplus.png",
+    paramountplus:"https://i.ibb.co/8L12R946/paramountplus.png",
+    jovempan:"https://i.ibb.co/5W70N5fD/jovem-pan-sp.webp",
+    cbn:"https://i.ibb.co/KxWpjB22/cbn-sp.png",
+    antena1:"https://i.ibb.co/gZFPnW6Q/antena-1.webp",
+    mixfm:"https://i.ibb.co/tMxGdzSD/mix-fm.webp",
+    alpha:"https://i.ibb.co/hJktMTCx/radio31289-1439401796.webp",
+    bandfm:"https://i.ibb.co/DDJpTnyB/radio203305-1781790110.webp",
+    nativa:"https://i.ibb.co/nqhZvVJZ/radio9015-1783358189.webp",
+    gazeta:"https://i.ibb.co/TBK5Xv4r/download.png",
+    usp:"https://i.ibb.co/xqsr8svK/45052-v36.png"
+  };
+  return logos[id]||null;
+}
+
+const channelData=[
+  {id:"globosp",nome:"Globo SP"},{id:"record",nome:"Record TV"},{id:"sbt",nome:"SBT"},
+  {id:"redetv",nome:"RedeTV!"},{id:"band",nome:"Band"},{id:"bandsp",nome:"Band SP"},
+  {id:"cnnbrasil",nome:"CNN Brasil"},{id:"recordnews",nome:"Record News"},{id:"bandnews",nome:"Band News"},
+  {id:"espn",nome:"ESPN"},{id:"espn2",nome:"ESPN 2"},{id:"espn3",nome:"ESPN 3"},{id:"espn4",nome:"ESPN 4"},
+  {id:"sportv",nome:"SporTV"},{id:"sportv2",nome:"SporTV 2"},{id:"sportv3",nome:"SporTV 3"},
+  {id:"premiere7",nome:"Premiere"},{id:"combate",nome:"Combate"},{id:"bandsports",nome:"Band Sports"},
+  {id:"xsports",nome:"XSports"},{id:"hbo",nome:"HBO"},{id:"hbo2",nome:"HBO 2"},
+  {id:"hbofamily",nome:"HBO Family"},{id:"hboplus",nome:"HBO Plus"},{id:"hbosignature",nome:"HBO Signature"},
+  {id:"max",nome:"Max"},{id:"telecinepremium",nome:"TC Premium"},{id:"telecineaction",nome:"TC Action"},
+  {id:"telecinecult",nome:"TC Cult"},{id:"telecinefun",nome:"TC Fun"},{id:"telecinepipoca",nome:"TC Pipoca"},
+  {id:"space",nome:"Space"},{id:"cinemax",nome:"Cinemax"},{id:"megapix",nome:"Megapix"},
+  {id:"axn",nome:"AXN"},{id:"sonychannel",nome:"Sony"},{id:"warnerchannel",nome:"Warner"},
+  {id:"comedycentral",nome:"Comedy"},{id:"ae",nome:"A&E"},{id:"discoverychannel",nome:"Discovery"},
+  {id:"discoveryhh",nome:"Discovery H&H"},{id:"discoveryscience",nome:"Discovery Science"},
+  {id:"discoveryturbo",nome:"Discovery Turbo"},{id:"history",nome:"History"},{id:"history2",nome:"History 2"},
+  {id:"animalplanet",nome:"Animal Planet"},{id:"off",nome:"Canal Off"},{id:"gnt",nome:"GNT"},
+  {id:"cartoonnetwork",nome:"Cartoon"},{id:"cartoonito",nome:"Cartoonito"},{id:"discoverykids",nome:"Discovery Kids"},
+  {id:"nickelodeon",nome:"Nickelodeon"},{id:"nickjr",nome:"Nick Jr."},{id:"disneyplus",nome:"Disney+"},
+  {id:"paramountplus",nome:"Paramount+"}
 ];
+
+const radios=[
+  {id:"jovempan",nome:"Jovem Pan",url:"https://stream.zeno.fm/c45wbq2us3buv",genero:"Notícias",cor:"#e60014"},
+  {id:"cbn",nome:"CBN",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/CBN_SPAAC.aac",genero:"Jornalismo",cor:"#d40000"},
+  {id:"usp",nome:"USP FM",url:"https://flow.emm.usp.br:8007/radiousp-128.mp3",genero:"MPB",cor:"#0055a5"},
+  {id:"antena1",nome:"Antena 1",url:"https://antenaone.crossradio.com.br/stream/1",genero:"Adulto",cor:"#003da5"},
+  {id:"mixfm",nome:"Mix FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/MIXFM_SAOPAULO.mp3",genero:"Pop",cor:"#ff6600"},
+  {id:"alpha",nome:"Alpha FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_ALPHAFM.mp3",genero:"Flashback",cor:"#7b0099"},
+  {id:"bandfm",nome:"Band FM",url:"https://playerservices.streamtheworld.com/api/livestream-redirect/BANDFM_SP.mp3",genero:"Popular",cor:"#00a651"},
+  {id:"nativa",nome:"Nativa FM",url:"https://stm7.xcast.com.br:7460/stream",genero:"Sertanejo",cor:"#c8102e"},
+  {id:"gazeta",nome:"Gazeta FM",url:"https://gazetafmsite.crossradio.com.br:19878",genero:"Hits",cor:"#0072bc"},
+  {nome:"Discovery FM",url:"https://stream-173.zeno.fm/jup1kxp5o6wtv",genero:"Variado",cor:"#00a0df"},
+  {nome:"89 Rock",url:"https://ice.fabricahost.com.br/89aradiorockgo",genero:"Rock",cor:"#111"},
+  {nome:"Antena Rock",url:"https://hts05.brascast.com:12062/live",genero:"Rock",cor:"#333"},
+  {nome:"Gospel",url:"http://servidor30.brlogic.com:8252/live",genero:"Gospel",cor:"#f2a900"},
+  {nome:"Rádio Itália",url:"https://kisskiss.fluidstream.eu/KissKiss.mp3",genero:"Itália",cor:"#008c45"}
+];
+
+const tvScroll=document.getElementById('tvScroll');
 const radioScroll=document.getElementById('radioScroll');
+function rolarTv(qtd){tvScroll.scrollBy({left:qtd,behavior:'smooth'})}
 function rolarRadio(qtd){radioScroll.scrollBy({left:qtd,behavior:'smooth'})}
+
+function renderCanais(){
+  tvScroll.innerHTML="";
+  channelData.forEach(ch=>{
+    const card=document.createElement('div');card.className='channel-card';
+    const logoUrl=getLogoUrl(ch.id);
+    const init=ch.nome.replace(/[^a-zA-Z]/g,'').substring(0,2).toUpperCase()||'TV';
+    card.innerHTML=`
+      <div class="logo-box">
+        ${logoUrl?`<img src="${logoUrl}" alt="${ch.nome}" class="card-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-init" style="display:none">${init}</div>`:`<div class="card-init">${init}</div>`}
+      </div>
+      <div class="card-name">${ch.nome}</div>
+    `;
+    card.onclick=()=>abrirTv(ch);
+    tvScroll.appendChild(card);
+  });
+}
+
 function renderRadios(){
   radioScroll.innerHTML="";
   radios.forEach(r=>{
+    const logoUrl=getLogoUrl(r.id);
     const inic=r.nome.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
     const card=document.createElement('div');card.className='radio-card';
     card.innerHTML=`
       <div class="logo-box">
-        ${r.logo?`<img src="${r.logo}" alt="${r.nome}" class="card-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="card-init" style="display:none;background:${r.cor}">${inic}</div>`:`<div class="card-init" style="background:${r.cor}">${inic}</div>`}
+        ${logoUrl?`<img src="${logoUrl}" alt="${r.nome}" class="card-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-init" style="background:${r.cor};display:none">${inic}</div>`:`<div class="card-init" style="background:${r.cor}">${inic}</div>`}
       </div>
       <div class="card-name">${r.nome}</div>
       <div class="card-genre">${r.genero}</div>
     `;
-    card.onclick=()=>tocarRadio(r,card);
+    card.onclick=()=>abrirRadio(r,card);
     radioScroll.appendChild(card);
   });
 }
-function tocarRadio(r,card){
-  if(isLoading) return;
-  if(currentCard === card && currentRadio){
-    alternarPlay();
-    return;
-  }
-  isLoading = true;
-  if(currentCard) currentCard.classList.remove('active','loading');
-  currentCard = card;
-  card.classList.add('loading');
-  currentRadio = r;
-  
-  radioNameDisplay.textContent = r.nome;
-  radioGenreDisplay.textContent = r.genero;
-  
-  audio.pause();
-  audio.src = r.url;
-  audio.load();
-  
-  audio.play().then(()=>{
-    isLoading = false;
-    card.classList.remove('loading');
-    card.classList.add('active');
-    playPauseBtn.textContent = '⏸';
-    mostrarRadio();
-    iniciarVisualizador();
-  }).catch(()=>{
-    isLoading = false;
-    card.classList.remove('loading');
-    alert('Clique no botão ▶ para ouvir');
-  });
-}
+
 audio.addEventListener('error',()=>{
-  isLoading = false;
+  isLoading=false;
   if(currentCard) currentCard.classList.remove('loading','active');
   alert('Erro — tente outra rádio');
 });
