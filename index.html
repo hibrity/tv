@@ -154,7 +154,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 const pwaBtn = document.getElementById('pwa_btn');
 let pwaDeferred = null;
 
-// ✅ PWA — verifica se já está instalado/rodando como app
+// ✅ PWA
 function checkIfAppMode(){
   if((window.matchMedia('(display-mode: standalone)').matches || 
       window.matchMedia('(display-mode: fullscreen)').matches ||
@@ -172,7 +172,6 @@ function markAsInstalled(){
   pwaDeferred = null;
 }
 
-// ✅ MANIFEST PWA EMBUTIDO — igual ao método do Anote
 function pwaManifest(){
   const m = {
     name: 'TVG',
@@ -199,20 +198,17 @@ function pwaManifest(){
   link.href = URL.createObjectURL(blob);
 }
 
-// ✅ Eventos PWA
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   pwaDeferred = e;
   checkIfAppMode();
 });
-
 window.addEventListener('appinstalled', markAsInstalled);
 window.addEventListener('load', () => {
-  pwaManifest(); // Gera o manifesto logo cedo
+  pwaManifest();
   checkIfAppMode();
 });
 
-// ✅ Função de instalação
 function pwaInstall(){
   if(pwaDeferred){
     pwaDeferred.prompt();
@@ -228,18 +224,26 @@ function pwaInstall(){
   }
 }
 
+// ✅ GIRAR TELA SOMENTE EM TELA CHEIA
 function girarTelaPaisagem(){
   if(screen.orientation?.lock){
     screen.orientation.lock('landscape').catch(()=>{});
   }
 }
-function girarTelaRetrato(){
-  screen.orientation?.unlock?.();
+function liberarTela(){
+  if(screen.orientation?.unlock){
+    screen.orientation.unlock();
+  }
 }
 
 document.addEventListener('fullscreenchange', () => {
-  if(document.fullscreenElement) girarTelaPaisagem();
-  else girarTelaRetrato();
+  if(document.fullscreenElement){
+    // ✅ Entrou em tela cheia → gira para paisagem
+    girarTelaPaisagem();
+  }else{
+    // ✅ Saiu da tela cheia → LIBERA rotação, usuário escolhe
+    liberarTela();
+  }
 });
 
 function getLogoUrl(id){
@@ -387,9 +391,7 @@ function abrirCanal(id, nome, cardEl){
   
   setTimeout(() => {
     if(!document.fullscreenElement){
-      document.getElementById('iframe-container').requestFullscreen?.()
-        .then(girarTelaPaisagem)
-        .catch(()=>{});
+      document.getElementById('iframe-container').requestFullscreen?.().catch(()=>{});
     }
   }, 400);
 }
@@ -397,10 +399,9 @@ function abrirCanal(id, nome, cardEl){
 function toggleFullscreen(){
   const c = document.getElementById('iframe-container');
   if(!document.fullscreenElement){
-    c.requestFullscreen?.().then(girarTelaPaisagem).catch(()=>{});
+    c.requestFullscreen?.().catch(()=>{});
   }else{
     document.exitFullscreen?.();
-    girarTelaRetrato();
   }
 }
 
