@@ -77,33 +77,32 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   flex:1;position:relative;width:100%;height:100%;background:#000;
   overflow:hidden;
 }
-/* Máscara para esconder a palavra EMBED - sem cortar o vídeo */
+/* Máscara fixa no topo — SEM deslocar o vídeo */
 .iframe-container::before{
   content:'';
   position:absolute;
   top:0;left:0;right:0;
-  height:40px;
+  height:44px;
   background:#000;
   z-index:10;
   pointer-events:none;
 }
 #iframe-player{
   width:100%;
-  height:calc(100% + 40px);
+  height:100%;
   border:none;
   display:none;
   position:absolute;
-  top:-40px;
+  top:0;
   left:0;
 }
-/* Em tela cheia: sem deslocamento, nada cortado! */
+/* Em tela cheia: SEM máscara, SEM deslocamento, TUDO visível */
+#iframe-container:fullscreen::before{display:none}
 #iframe-container:fullscreen #iframe-player{
   width:100%;
   height:100%;
   top:0;
-}
-#iframe-container:fullscreen::before{
-  display:none;
+  left:0;
 }
 
 .placeholder-screen{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#888;z-index:5}
@@ -200,7 +199,6 @@ function markAsInstalled(){
 }
 window.addEventListener('load', ()=>{ if(!checkIfAppMode() && !checkInstalledFlag()){} });
 
-// Girar tela
 function girarTelaPaisagem(){
   if(screen.orientation && screen.orientation.lock){
     screen.orientation.lock('landscape').catch(e=>console.log('Rotação:',e));
