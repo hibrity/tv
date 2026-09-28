@@ -21,7 +21,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 .app-layout{
   display:flex;flex-direction:column;
-  height:calc(100vh - 56px);
+  height:calc(100vh - 112px); /* Espaço para as barras no rodapé */
   position:relative;
   overflow:hidden;
 }
@@ -121,31 +121,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 }
 .volume-value{color:var(--radio-accent);font-size:.75rem;min-width:40px;text-align:right}
 
-.bars-wrapper{order:4;flex:1;overflow-y:auto;padding-top:0}
+/* === BLOCO DAS BARRAS FIXAS NO RODAPÉ === */
+.bars-footer{
+  position:fixed;bottom:56px;left:0;right:0;
+  background:var(--bar);border-top:1px solid #1a3a5c;
+  z-index:998;
+}
 
 .bar-section{
-  padding:8px 0;background:var(--card2);border-bottom:1px solid #1a3a5c;
+  padding:6px 0;
   transition:opacity .3s ease, max-height .3s ease, margin .3s ease;
-  opacity:1;max-height:500px;overflow:hidden;
+  opacity:1;max-height:200px;overflow:hidden;
 }
-.bar-section.hidden-bar{opacity:0;max-height:0;margin:0}
+.bar-section.hidden-bar{opacity:0;max-height:0;margin:0;padding:0}
 
 .bar-header{
   display:flex;justify-content:space-between;align-items:center;
-  padding:5px 15px 3px;
+  padding:4px 15px 2px;
 }
 .bar-label{
   font-size:.75rem;font-weight:600;color:#888;display:flex;align-items:center;gap:6px
 }
 .close-btn{
   background:transparent;color:#ff6b6b;border:1px solid #ff6b6b;
-  padding:1px 8px;
-  border-radius:4px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:.7rem;
-  line-height:1.2;
-  transition:all .2s
+  padding:1px 8px;border-radius:4px;cursor:pointer;
+  font-weight:600;font-size:.7rem;line-height:1.2;transition:all .2s
 }
 .close-btn:hover{background:#ff6b6b;color:#fff}
 
@@ -157,22 +157,30 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 }
 .scroll-btn:hover{background:var(--btn-nav-hover)}
 .cards-scroll{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:6px 8px;width:100%}
-.cards-scroll::-webkit-scrollbar{height:4px}
+.cards-scroll::-webkit-scrollbar{height:3px}
 .cards-scroll::-webkit-scrollbar-thumb{background:#3a5f85;border-radius:4px}
 
 .channel-card, .radio-card{
-  flex:0 0 90px;background:var(--card);border:2px solid var(--border);
-  border-radius:10px;padding:10px;cursor:pointer;transition:all .2s;text-align:center
+  flex:0 0 85px;background:var(--card);border:2px solid var(--border);
+  border-radius:10px;padding:8px;cursor:pointer;transition:all .2s;text-align:center
 }
 .channel-card:hover, .radio-card:hover{transform:scale(1.05);border-color:var(--accent)}
 .channel-card.active, .radio-card.active{border-color:var(--radio-accent);box-shadow:0 0 0 2px rgba(0,255,136,.3)}
 .radio-card.loading{opacity:.6;cursor:wait}
 
-.logo-box{width:50px;height:50px;margin:0 auto 6px;border-radius:50%;background:#1a1a1e;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.card-logo{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.card-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;background:linear-gradient(135deg,#2a4a6b,#1a3a5c);border-radius:8px;color:#fff}
-.card-name{font-size:.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-genre{font-size:.65rem;color:#888;margin-top:2px}
+.logo-box{
+  width:44px;height:44px;margin:0 auto 4px;border-radius:50%;
+  background:#ffffff;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  padding:5px;
+}
+.card-logo{
+  max-width:100%;max-height:100%;object-fit:contain;display:block;
+  filter:drop-shadow(0 0 2px rgba(0,0,0,.4));
+}
+.card-init{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;background:linear-gradient(135deg,#2a4a6b,#1a3a5c);border-radius:8px;color:#fff}
+.card-name{font-size:.7rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-genre{font-size:.6rem;color:#888;margin-top:1px}
 
 .hidden-radio-player{position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none}
 
@@ -190,10 +198,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 #pwa_btn.hidden{display:none !important}
 
 @media(max-width:768px){
-  .channel-card, .radio-card{flex:0 0 80px}
+  .channel-card, .radio-card{flex:0 0 75px}
   .player-content-tv{height:240px}
   .player-tv.visible{max-height:280px}
   .volume-container{flex:0 0 130px}
+  .app-layout{height:calc(100vh - 112px)}
 }
 </style>
 </head>
@@ -242,30 +251,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     </div>
     <button class="radio-control-btn" id="mudoBtn" onclick="alternarMudo()">🔇</button>
   </div>
+</div>
 
-  <div class="bars-wrapper">
-    <div class="bar-section" id="tvBar">
-      <div class="bar-header">
-        <div class="bar-label">📺 Canais TV</div>
-        <button class="close-btn" onclick="fecharTudo()">✖</button>
-      </div>
-      <div class="bar-container">
-        <button class="scroll-btn" onclick="rolarTv(-200)">&#10094;</button>
-        <div class="cards-scroll" id="tvScroll"></div>
-        <button class="scroll-btn" onclick="rolarTv(200)">&#10095;</button>
-      </div>
+<!-- BARRAS DE CANAIS E RÁDIOS FIXAS NO RODAPÉ -->
+<div class="bars-footer">
+  <div class="bar-section" id="tvBar">
+    <div class="bar-header">
+      <div class="bar-label">📺 Canais TV</div>
+      <button class="close-btn" onclick="fecharTv()">✖</button>
     </div>
+    <div class="bar-container">
+      <button class="scroll-btn" onclick="rolarTv(-200)">&#10094;</button>
+      <div class="cards-scroll" id="tvScroll"></div>
+      <button class="scroll-btn" onclick="rolarTv(200)">&#10095;</button>
+    </div>
+  </div>
 
-    <div class="bar-section" id="radioBar">
-      <div class="bar-header">
-        <div class="bar-label">📻 Rádios</div>
-        <button class="close-btn" onclick="fecharTudo()">✖</button>
-      </div>
-      <div class="bar-container">
-        <button class="scroll-btn" onclick="rolarRadio(-200)">&#10094;</button>
-        <div class="cards-scroll" id="radioScroll"></div>
-        <button class="scroll-btn" onclick="rolarRadio(200)">&#10095;</button>
-      </div>
+  <div class="bar-section" id="radioBar">
+    <div class="bar-header">
+      <div class="bar-label">📻 Rádios</div>
+      <button class="close-btn" onclick="fecharRadio()">✖</button>
+    </div>
+    <div class="bar-container">
+      <button class="scroll-btn" onclick="rolarRadio(-200)">&#10094;</button>
+      <div class="cards-scroll" id="radioScroll"></div>
+      <button class="scroll-btn" onclick="rolarRadio(200)">&#10095;</button>
     </div>
   </div>
 </div>
@@ -409,12 +419,28 @@ function fecharTudo(){
   radioBar.classList.remove('hidden-bar');
 }
 
+function fecharTv(){
+  playerTv.classList.remove('visible');
+  mainIframe.src = ''; mainIframe.classList.remove('visible');
+  tvBar.classList.add('hidden-bar');
+  radioBar.classList.remove('hidden-bar');
+}
+
+function fecharRadio(){
+  if(!audio.paused){ audio.pause(); playPauseBtn.textContent='▶'; pararVisualizador(); }
+  playerRadio.classList.remove('visible');
+  radioControlsBar.classList.remove('visible');
+  document.querySelectorAll('.radio-card').forEach(c=>c.classList.remove('active','loading'));
+  currentRadio = currentCard = null;
+  radioBar.classList.add('hidden-bar');
+  tvBar.classList.remove('hidden-bar');
+}
+
 function toggleFullscreen(){
   const c=document.getElementById('iframe-container');
   document.fullscreenElement?document.exitFullscreen?.():c.requestFullscreen?.().catch(()=>{});
 }
 
-// === LINKS DOS LOGOS DAS RÁDIOS — ATUALIZADOS ===
 function getLogoUrl(id){
   const logos={
     globosp:"https://i.ibb.co/Cpm2HM3s/globo.webp",
