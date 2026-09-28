@@ -170,7 +170,6 @@ function markAsInstalled(){
 }
 window.addEventListener('load', ()=>{ if(!checkIfAppMode() && !checkInstalledFlag()){} });
 
-// ✅ TODOS COM LOGO — NENHUM FALTA!
 function getLogoUrl(id){
   const logos={
     globosp:"https://i.ibb.co/Cpm2HM3s/globo.webp",
@@ -319,8 +318,37 @@ const wrapper=document.getElementById('cardsWrapper');
 const iframePlayer=document.getElementById('iframe-player');
 const placeholder=document.getElementById('placeholder');
 const channelTitle=document.getElementById('current-channel-title');
+const iframeContainer=document.getElementById('iframe-container');
 
 function rolar(qtd){ wrapper.scrollBy({left:qtd,behavior:'smooth'}) }
+
+function abrirCanal(canal,cardEl){
+  channelTitle.textContent=canal.name;
+  placeholder.style.display='none';
+  iframePlayer.style.display='block';
+  
+  // ✅ Usa a URL ORIGINAL — sem remover /e/
+  iframePlayer.src = canal.url;
+  
+  document.querySelectorAll('.channel-card').forEach(c=>c.classList.remove('active'));
+  cardEl.classList.add('active');
+  cardEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  
+  // ✅ Tela cheia automática
+  setTimeout(() => {
+    if(!document.fullscreenElement){
+      iframeContainer.requestFullscreen?.().catch(e=>console.log('Tela cheia:',e));
+    }
+  }, 300);
+}
+
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    iframeContainer.requestFullscreen?.().catch(e=>console.log(e));
+  }else{
+    document.exitFullscreen?.();
+  }
+}
 
 function renderCanais(){
   wrapper.innerHTML="";
@@ -342,25 +370,6 @@ function renderCanais(){
     card.onclick=()=>abrirCanal(ch,card);
     wrapper.appendChild(card);
   });
-}
-
-function abrirCanal(canal,cardEl){
-  channelTitle.textContent=canal.name;
-  placeholder.style.display='none';
-  iframePlayer.style.display='block';
-  iframePlayer.src=canal.url;
-  document.querySelectorAll('.channel-card').forEach(c=>c.classList.remove('active'));
-  cardEl.classList.add('active');
-  cardEl.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function toggleFullscreen(){
-  const c=document.getElementById('iframe-container');
-  if(!document.fullscreenElement){
-    c.requestFullscreen?.().catch(e=>console.log(e));
-  }else{
-    document.exitFullscreen?.();
-  }
 }
 
 renderCanais();
