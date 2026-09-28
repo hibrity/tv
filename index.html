@@ -77,16 +77,29 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   flex:1;position:relative;width:100%;height:100%;background:#000;
   overflow:hidden;
 }
-/* Máscara fixa no topo — SEM deslocar o vídeo */
-.iframe-container::before{
-  content:'';
+/* ✅ SOBREPOSIÇÃO: logo TVG exatamente no lugar da palavra — sem cortar NADA */
+.iframe-mask{
   position:absolute;
   top:0;left:0;right:0;
   height:44px;
   background:#000;
+  display:flex;align-items:center;justify-content:center;
   z-index:10;
   pointer-events:none;
 }
+.iframe-mask-text{
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#4CAF50,#00d4ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+/* Em tela cheia: esconde o logo */
+#iframe-container:fullscreen .iframe-mask{display:none}
+
 #iframe-player{
   width:100%;
   height:100%;
@@ -96,18 +109,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   top:0;
   left:0;
 }
-/* Em tela cheia: SEM máscara, SEM deslocamento, TUDO visível */
-#iframe-container:fullscreen::before{display:none}
-#iframe-container:fullscreen #iframe-player{
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
-}
 
 .placeholder-screen{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#888;z-index:5}
 .placeholder-screen svg{width:64px;height:64px;margin-bottom:15px;stroke:#444}
-#iframe-container:fullscreen{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center}
 
 .bottom-bar{
   position:fixed;bottom:0;left:0;right:0;height:56px;
@@ -159,6 +163,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       </div>
     </div>
     <div class="iframe-container" id="iframe-container">
+      <!-- ✅ Logo TVG no lugar da palavra -->
+      <div class="iframe-mask">
+        <span class="iframe-mask-text">TVG</span>
+      </div>
       <div class="placeholder-screen" id="placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <polygon points="5 3 19 12 5 21 5 3"/>
