@@ -21,9 +21,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 .app-layout{
   display:flex;flex-direction:column;
-  height:calc(100vh - 112px); /* Espaço para as barras no rodapé */
+  height:calc(100vh - 112px);
   position:relative;
   overflow:hidden;
+  margin-bottom:0;
+  padding-bottom:0;
 }
 
 .player-tv{
@@ -31,6 +33,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   max-height:0;opacity:0;overflow:hidden;
   transition:all .3s ease;
   background:#000;
+  margin:0;
 }
 .player-tv.visible{max-height:340px;opacity:1}
 
@@ -39,6 +42,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   max-height:0;opacity:0;overflow:hidden;
   transition:all .3s ease;
   background:radial-gradient(circle at top,#1a3a2e 0%,#0a1a12 60%,#000 100%);
+  margin:0;
 }
 .player-radio.visible{max-height:220px;opacity:1}
 
@@ -99,6 +103,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   order:3;flex-shrink:0;padding:8px 15px;background:linear-gradient(to right,#0f2e23,#0a1a12);
   border-bottom:1px solid #1a3a2e;display:flex;align-items:center;justify-content:center;
   gap:12px;max-height:0;opacity:0;overflow:hidden;transition:all .3s ease;
+  margin:0;
 }
 .radio-controls-bar.visible{max-height:65px;opacity:1}
 
@@ -121,15 +126,19 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 }
 .volume-value{color:var(--radio-accent);font-size:.75rem;min-width:40px;text-align:right}
 
-/* === BLOCO DAS BARRAS FIXAS NO RODAPÉ === */
+/* === BARRAS NO RODAPÉ — SEM ESPAÇO ENTRE PLAYER E BARRAS === */
 .bars-footer{
   position:fixed;bottom:56px;left:0;right:0;
-  background:var(--bar);border-top:1px solid #1a3a5c;
+  background:var(--bar);
+  border-top:none;
+  margin-top:0;
+  padding-top:0;
   z-index:998;
 }
 
 .bar-section{
-  padding:6px 0;
+  padding:4px 0;
+  margin:0;
   transition:opacity .3s ease, max-height .3s ease, margin .3s ease;
   opacity:1;max-height:200px;overflow:hidden;
 }
@@ -137,7 +146,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 .bar-header{
   display:flex;justify-content:space-between;align-items:center;
-  padding:4px 15px 2px;
+  padding:2px 15px 0;
+  margin:0;
 }
 .bar-label{
   font-size:.75rem;font-weight:600;color:#888;display:flex;align-items:center;gap:6px
@@ -149,14 +159,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 }
 .close-btn:hover{background:#ff6b6b;color:#fff}
 
-.bar-container{display:flex;align-items:center;position:relative;padding:0 8px;gap:6px}
+.bar-container{display:flex;align-items:center;position:relative;padding:0 8px;gap:6px;margin:0}
 .scroll-btn{
   background:var(--btn-nav);color:#fff;border:none;cursor:pointer;
   border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
   font-size:14px;transition:background .2s;flex-shrink:0
 }
 .scroll-btn:hover{background:var(--btn-nav-hover)}
-.cards-scroll{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:6px 8px;width:100%}
+.cards-scroll{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;padding:4px 8px;width:100%;margin:0}
 .cards-scroll::-webkit-scrollbar{height:3px}
 .cards-scroll::-webkit-scrollbar-thumb{background:#3a5f85;border-radius:4px}
 
@@ -253,7 +263,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
-<!-- BARRAS DE CANAIS E RÁDIOS FIXAS NO RODAPÉ -->
 <div class="bars-footer">
   <div class="bar-section" id="tvBar">
     <div class="bar-header">
