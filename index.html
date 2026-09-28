@@ -77,29 +77,30 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   flex:1;position:relative;width:100%;height:100%;background:#000;
   overflow:hidden;
 }
-/* ✅ SOBREPOSIÇÃO: logo TVG exatamente no lugar da palavra — sem cortar NADA */
+/* ✅ MÁSCARA FIXA — SEM DESLOCAR O VÍDEO */
 .iframe-mask{
   position:absolute;
   top:0;left:0;right:0;
-  height:44px;
+  height: clamp(40px, 6vh, 60px); /* se adapta a qualquer tela */
   background:#000;
   display:flex;align-items:center;justify-content:center;
   z-index:10;
   pointer-events:none;
 }
-.iframe-mask-text{
-  font-size:18px;
-  font-weight:700;
-  color:#fff;
-  letter-spacing:2px;
+.mask-logo{
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight:800;
+  letter-spacing: 4px;
   background:linear-gradient(90deg,#4CAF50,#00d4ff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-clip:text;
+  user-select:none;
 }
-/* Em tela cheia: esconde o logo */
-#iframe-container:fullscreen .iframe-mask{display:none}
+/* ✅ TELA CHEIA: máscara DESAPARECE COMPLETAMENTE */
+#iframe-container:fullscreen .iframe-mask{display:none !important;}
 
+/* ✅ VÍDEO SEM NENHUM DESLOCAMENTO — 100% preenchido */
 #iframe-player{
   width:100%;
   height:100%;
@@ -163,9 +164,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       </div>
     </div>
     <div class="iframe-container" id="iframe-container">
-      <!-- ✅ Logo TVG no lugar da palavra -->
+      <!-- ✅ MÁSCARA ADAPTÁVEL -->
       <div class="iframe-mask">
-        <span class="iframe-mask-text">TVG</span>
+        <span class="mask-logo">TVG</span>
       </div>
       <div class="placeholder-screen" id="placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -184,6 +185,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 <script>
 const pwaBtn = document.getElementById('pwa_btn');
+const iframeContainer = document.getElementById('iframe-container');
+const iframePlayer = document.getElementById('iframe-player');
+const mask = document.querySelector('.iframe-mask');
 
 function checkIfAppMode(){
   if((window.matchMedia('(display-mode: standalone)').matches || 
@@ -218,10 +222,11 @@ function girarTelaRetrato(){
   }
 }
 
+// Garante que máscara some em tela cheia
 document.addEventListener('fullscreenchange', ()=>{
-  if(!document.fullscreenElement){
-    girarTelaRetrato();
-  }
+  mask.style.display = document.fullscreenElement ? 'none' : 'flex';
+  if(document.fullscreenElement) girarTelaPaisagem();
+  else girarTelaRetrato();
 });
 
 function getLogoUrl(id){
@@ -369,10 +374,8 @@ const channelData=[
 ];
 
 const wrapper=document.getElementById('cardsWrapper');
-const iframePlayer=document.getElementById('iframe-player');
 const placeholder=document.getElementById('placeholder');
 const channelTitle=document.getElementById('current-channel-title');
-const iframeContainer=document.getElementById('iframe-container');
 
 function rolar(qtd){ wrapper.scrollBy({left:qtd,behavior:'smooth'}) }
 
